@@ -6,6 +6,13 @@ Einleitung
 
 [Netty](http://www.mastertheboss.com/netty/use-netty-to-proxy-your-requests)
 
+Kompilierung
+------------
+
+```
+gradle installApp
+```
+
 Git
 ---
 

@@ -1,0 +1,18 @@
+apply plugin: "java"
+apply plugin: "application"
+
+mainClassName = "org.uli.tcpmon.TextDumpProxy";
+
+dependencies {
+  compile 'org.jboss.netty:netty:3.2.0.Final'
+  compile group: 'org.slf4j',     name: 'slf4j-api',   version: '+'
+  compile group: 'org.slf4j',     name: 'slf4j-log4j12', version: '+'
+  compile group: 'log4j',         name: 'apache-log4j-extras', version: '+'
+}
+
+repositories {
+    mavenCentral()
+}
+
+//clean.doLast {
+//}

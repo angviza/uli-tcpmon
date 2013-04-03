@@ -4,11 +4,14 @@ apply plugin: "application"
 
 mainClassName = "org.uli.tcpmon.TextDumpProxy";
 
+String slf4jVersion = '+'; // 1.7.5
+String log4jExtrasVersion = '+'; // 1.1
+
 dependencies {
   compile 'org.jboss.netty:netty:3.2.0.Final'
-  compile group: 'org.slf4j',     name: 'slf4j-api',   version: '+'
-  compile group: 'org.slf4j',     name: 'slf4j-log4j12', version: '+'
-  compile group: 'log4j',         name: 'apache-log4j-extras', version: '+'
+  compile group: 'org.slf4j',     name: 'slf4j-api',   version: slf4jVersion
+  compile group: 'org.slf4j',     name: 'slf4j-log4j12', version: slf4jVersion
+  compile group: 'log4j',         name: 'apache-log4j-extras', version: log4jExtrasVersion
 }
 
 repositories {

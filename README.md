@@ -1,5 +1,5 @@
 ULI-TCPMON
-============
+==========
 
 Einleitung
 ----------
@@ -10,7 +10,7 @@ Kompilierung
 ------------
 
 ```
-gradle installApp
+./gradlew installApp
 ```
 
 Git

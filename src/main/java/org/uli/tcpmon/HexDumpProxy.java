@@ -9,22 +9,18 @@ import org.jboss.netty.channel.socket.nio.NioClientSocketChannelFactory;
 import org.jboss.netty.channel.socket.nio.NioServerSocketChannelFactory;
 
 public class HexDumpProxy {
+
     public static void main(String[] args) throws Exception {
         // Validate command line options.
         if (args.length != 3) {
-            System.err.println(
-                    "Usage: " + HexDumpProxy.class.getSimpleName() +
-                    " <local port> <remote host> <remote port>");
+            System.err.println("Usage: " + HexDumpProxy.class.getSimpleName() + " <local port> <remote host> <remote port>");
             return;
         }
         // Parse command line options.
         int localPort = Integer.parseInt(args[0]);
         String remoteHost = args[1];
         int remotePort = Integer.parseInt(args[2]);
-
-        System.err.println(
-                "Proxying *:" + localPort + " to " +
-                remoteHost + ':' + remotePort + " ...");
+        System.err.println("Proxying *:" + localPort + " to " + remoteHost + ':' + remotePort + " ...");
         // Configure the bootstrap.
         Executor executor = Executors.newCachedThreadPool();
         ServerBootstrap sb = new ServerBootstrap(new NioServerSocketChannelFactory(executor, executor));

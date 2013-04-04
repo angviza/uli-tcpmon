@@ -20,7 +20,7 @@ public class LoggingProxyPipelineFactory implements ChannelPipelineFactory {
 
     public ChannelPipeline getPipeline() throws Exception {
         ChannelPipeline p = pipeline(); // Note the static import.
-        p.addLast("handler", new LoggingProxyInboundHandler(cf, remoteHost, remotePort, messageFormatter));
+        p.addLast("handler", new LoggingProxySender(cf, remoteHost, remotePort, messageFormatter));
         return p;
     }
 }

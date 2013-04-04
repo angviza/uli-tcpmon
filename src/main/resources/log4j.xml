@@ -1,0 +1,24 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE log4j:configuration SYSTEM "log4j.dtd">
+<log4j:configuration>
+    <appender name="stdout" class="org.apache.log4j.ConsoleAppender">
+        <layout class="org.apache.log4j.PatternLayout">
+            <param name="ConversionPattern" value="%d{yyyy-MM-dd} %d{ABSOLUTE} [%t] %5p %C:%L-%M() - %m%n" />
+        </layout>
+    </appender>
+
+    <appender name="file" class="org.apache.log4j.rolling.RollingFileAppender">
+        <param name="File" value="uli-tcpmon.log"/>
+        <rollingPolicy class="org.apache.log4j.rolling.TimeBasedRollingPolicy">
+           <param name="FileNamePattern" value="localhost-jmx.log.%d" />
+        </rollingPolicy>
+        <layout class="org.apache.log4j.PatternLayout">
+            <param name="ConversionPattern" value="%d{yyyy-MM-dd} %d{ABSOLUTE} [%t] %5p %C:%L-%M() - %m%n" />
+        </layout>
+    </appender>
+
+    <root>
+        <priority value="trace"></priority>
+        <appender-ref ref="file"/>
+    </root>
+</log4j:configuration>

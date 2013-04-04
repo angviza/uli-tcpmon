@@ -37,6 +37,7 @@ public class Main {
             int localPort;
             String remoteHost;
             int remotePort;
+            MessageFormatterType messageFormatterType = MessageFormatterType.MIXED;
             Options options = new Options();
             @SuppressWarnings("static-access")
             Option lp = OptionBuilder.withArgName("localPort")
@@ -59,15 +60,37 @@ public class Main {
                         .withDescription("remote port")
                         .withLongOpt("remote-port")
                         .create("r");
+            @SuppressWarnings("static-access")
+            Option textOnly = OptionBuilder
+                        .hasArg(false)
+                        .isRequired(false)
+                        .withDescription("do text-only logging")
+                        .withLongOpt("text-only")
+                        .create("T");
+            @SuppressWarnings("static-access")
+            Option hexOnly = OptionBuilder
+                        .hasArg(false)
+                        .isRequired(false)
+                        .withDescription("do hex-only logging")
+                        .withLongOpt("hex-only")
+                        .create("H");
             options.addOption(lp);
             options.addOption(rh);
             options.addOption(rp);
+            options.addOption(textOnly);
+            options.addOption(hexOnly);
             CommandLineParser commandLineParser = new PosixParser();
             try {
                 CommandLine commandLine = commandLineParser.parse(options, args);
                 localPort = Integer.parseInt(commandLine.getOptionValue("l"));
                 remoteHost = commandLine.getOptionValue("h");
                 remotePort = Integer.parseInt(commandLine.getOptionValue("r"));
+                if (commandLine.hasOption("H")) {
+                    messageFormatterType = MessageFormatterType.HEX_ONLY;
+                }
+                if (commandLine.hasOption("T")) {
+                    messageFormatterType = MessageFormatterType.TEXT_ONLY;
+                }
             } catch (ParseException e) {
                 System.err.println(NAME + ": Command line error - " + e.getMessage());
                 HelpFormatter helpFormatter = new HelpFormatter();
@@ -76,12 +99,13 @@ public class Main {
                 break;
             }
             logger.info("Proxying *:{} to {}:{}", localPort, remoteHost, remotePort);
+            MessageFormatter formatter = MessageFormatterFactory.getMessageFormatter(messageFormatterType);
             // Configure the bootstrap.
             Executor executor = Executors.newCachedThreadPool();
             ServerBootstrap sb = new ServerBootstrap(new NioServerSocketChannelFactory(executor, executor));
             // Set up the event pipeline factory.
             ClientSocketChannelFactory cf = new NioClientSocketChannelFactory(executor, executor);
-            sb.setPipelineFactory(new HexDumpProxyPipelineFactory(cf, remoteHost, remotePort));
+            sb.setPipelineFactory(new LoggingProxyPipelineFactory(cf, remoteHost, remotePort, formatter));
             // Start up the server.
             sb.bind(new InetSocketAddress(localPort));
             break;

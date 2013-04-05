@@ -2,4 +2,8 @@
 build
 *#
 /bin
-uli-tcpmon.log
+uli-tcpmon*.log
+.gradle
+.classpath
+.settings
+.project

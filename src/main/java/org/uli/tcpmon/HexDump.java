@@ -10,35 +10,61 @@ public class HexDump {
     static private final boolean DEFAULT_DUMP_TEXT  = true;
     
     static private final String LINE_SEPARATOR = System.getProperty("line.separator");
-    private int bytesPerLine;
-    private boolean fDumpHex;
-    private boolean fDumpText;
+    private final int bytesPerLine;
+    private final boolean fDumpHex;
+    private final boolean fDumpText;
+
+    public static abstract class Builder<T extends Builder<T>> {
+        private int bytesPerLine = DEFAULT_BYTES_PER_LINE;
+        private boolean fDumpHex = DEFAULT_DUMP_HEX;
+        private boolean fDumpText = DEFAULT_DUMP_TEXT;
+
+        protected abstract T self();
+
+        public T bytesPerLine(int bytesPerLine) {
+            this.bytesPerLine = bytesPerLine;
+            return self();
+        }
+
+        public T dumpHex(boolean fDumpHex) {
+            this.fDumpHex = fDumpHex;
+            return self();
+        }
+
+        public T dumpText(boolean fDumpText) {
+            this.fDumpText = fDumpText;
+            return self();
+        }
+
+        public HexDump build() {
+            return new HexDump(this);
+        }
+    }
+
+    private static class Builder2 extends Builder<Builder2> {
+        @Override
+        protected Builder2 self() {
+            return this;
+        }
+    }
+
+    public static Builder<?> builder() {
+        return new Builder2();
+    }
+
+    protected HexDump(Builder<?> builder) {
+        this.bytesPerLine = builder.bytesPerLine;
+        this.fDumpHex = builder.fDumpHex;
+        this.fDumpText = builder.fDumpText;
+    }
 
     static public String hexDump(byte[] array) {
         return hexDump(array, 0, array.length);
     }
 
     static public String hexDump(byte[] array, int offset, int length) {
-        HexDump hd = new HexDump();
+        HexDump hd = HexDump.builder().build();
         return hd.dump(array, offset, length);
-    }
-
-    public HexDump() {
-        this(DEFAULT_BYTES_PER_LINE);
-    }
-
-    public HexDump(int bytesPerLine) {
-        this(bytesPerLine, DEFAULT_DUMP_HEX);
-    }
-    
-    public HexDump(int bytesPerLine, boolean fDumpHex) {
-        this(bytesPerLine, fDumpHex, DEFAULT_DUMP_TEXT);
-    }
-    
-    public HexDump(int bytesPerLine, boolean fDumpHex, boolean fDumpText) {
-        this.bytesPerLine = bytesPerLine;
-        this.fDumpHex     = fDumpHex;
-        this.fDumpText    = fDumpText;
     }
 
     public String dump(byte[] array) {
@@ -124,10 +150,12 @@ public class HexDump {
                     textBuffer.append(text(b));
                 }
             }
-            if (this.fDumpHex) {
+            if (this.fDumpHex && this.fDumpText) {
                 for (; i < this.bytesPerLine; i++) {
                     append(hexBuffer, "  ", i);
                 }
+            }
+            if (this.fDumpHex) {
                 sb.append(hexBuffer);
             }
             if (this.fDumpText) {

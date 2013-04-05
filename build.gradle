@@ -21,5 +21,12 @@ repositories {
     mavenCentral()
 }
 
+tasks.withType(FindBugs) {
+    reports {
+        xml.enabled = false
+        html.enabled = true
+    }
+}
+
 //clean.doLast {
 //}

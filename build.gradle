@@ -1,6 +1,7 @@
 apply plugin: "java"
 apply plugin: "eclipse"
 apply plugin: "application"
+apply plugin: "findbugs"
 
 mainClassName = "org.uli.tcpmon.Main";
 

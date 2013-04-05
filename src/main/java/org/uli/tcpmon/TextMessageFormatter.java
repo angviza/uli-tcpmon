@@ -1,12 +1,13 @@
 package org.uli.tcpmon;
 
+import java.nio.charset.Charset;
 import java.util.LinkedList;
 import java.util.List;
 
 public class TextMessageFormatter implements MessageFormatter {
     @Override
     public List<String> format(byte[] message) {
-        String rawText = new String(message);
+        String rawText = new String(message, Charset.defaultCharset());
         String[] splittedText = rawText.split("\\n");
         List<String> formatted = new LinkedList<String>();
         for (String l : splittedText) {

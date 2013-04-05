@@ -1,5 +1,6 @@
 package org.uli.tcpmon;
 
+import java.nio.charset.Charset;
 import java.util.LinkedList;
 import java.util.List;
 
@@ -117,7 +118,7 @@ public class HexDump {
     private String text(byte n) {
         String result;
         if (isPrintable(n)) {
-            result = new String(new byte[] { n });
+            result = new String(new byte[] { n }, Charset.forName("US-ASCII"));
         } else {
             result = ".";
         }
@@ -129,7 +130,7 @@ public class HexDump {
     }
 
     public static void main(String[] args) {
-        System.out.println(HexDump.hexDump(args[0].getBytes()));
+        System.out.println(HexDump.hexDump(args[0].getBytes(Charset.defaultCharset())));
     }
 
     private dumpLineResult dumpLine(byte[] array, int offset, int length) {
